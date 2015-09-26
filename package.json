@@ -1,0 +1,22 @@
+{
+  "name": "react-native-quick-actions",
+  "version": "0.0.1",
+  "description": "A react-native interface for Touch 3D home screen quick actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "scripts/postinstall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jordanbyron/react-native-quick-actions"
+  },
+  "author": "Jordan Byron <jordan.byron@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "react-native": "^0.11.2"
+  },
+  "peerDependencies": {
+    "react-native": "0.*"
+  }
+}
