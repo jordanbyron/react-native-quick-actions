@@ -23,7 +23,7 @@ RCT_EXPORT_MODULE();
 {
     if ((self = [super init])) {
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleQuicActionPress:)
+                                                 selector:@selector(handleQuickActionPress:)
                                                      name:RCTShortcutItemClicked
                                                    object:nil];
     }
@@ -53,7 +53,7 @@ RCT_EXPORT_MODULE();
     completionHandler(YES);
 }
 
-- (void)handleQuicActionPress:(UIApplicationShortcutItem *) shortcutItem
+- (void)handleQuickActionPress:(UIApplicationShortcutItem *) shortcutItem
 {
     [_bridge.eventDispatcher sendDeviceEventWithName:@"quickActionShortcut"
                                                 body:[shortcutItem userInfo]];
