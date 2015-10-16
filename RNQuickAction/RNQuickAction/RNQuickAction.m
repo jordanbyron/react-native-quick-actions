@@ -10,10 +10,14 @@
 #import "RCTConvert.h"
 #import "RCTEventDispatcher.h"
 #import "RNQuickAction.h"
+#import "RCTUtils.h"
 
 NSString *const RCTShortcutItemClicked = @"ShortcutItemClicked";
 
 @implementation RNQuickAction
+{
+    NSDictionary *_initialGesture;
+}
 
 @synthesize bridge = _bridge;
 
@@ -30,12 +34,18 @@ RCT_EXPORT_MODULE();
     return self;
 }
 
+- (void)setBridge:(RCTBridge *)bridge
+{
+    _bridge = bridge;
+    _initialGesture = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-+(void) onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
++ (void) onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
 {
     NSLog(@"Quick action shortcut item pressed: %@", shortcutItem);
     
@@ -57,6 +67,13 @@ RCT_EXPORT_MODULE();
 {
     [_bridge.eventDispatcher sendDeviceEventWithName:@"quickActionShortcut"
                                                 body:[shortcutItem userInfo]];
+}
+
+- (NSDictionary *)constantsToExport
+{
+    return @{
+        @"initialGesture": RCTNullIfNil(_initialGesture),
+    };
 }
 
 @end
