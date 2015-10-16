@@ -19,6 +19,10 @@ NSString *const RCTShortcutItemClicked = @"ShortcutItemClicked";
     NSDictionary *_initialGesture;
 }
 
+RCT_EXPORT_MODULE();
+
+@synthesize bridge = _bridge;
+
 - (instancetype)init
 {
     if ((self = [super init])) {
@@ -30,19 +34,15 @@ NSString *const RCTShortcutItemClicked = @"ShortcutItemClicked";
     return self;
 }
 
-@synthesize bridge = _bridge;
-
-RCT_EXPORT_MODULE();
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)setBridge:(RCTBridge *)bridge
 {
     _bridge = bridge;
     _initialGesture = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 + (void) onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
@@ -65,7 +65,7 @@ RCT_EXPORT_MODULE();
 - (void)handleQuickActionPress:(NSNotification *) notification
 {
     [_bridge.eventDispatcher sendDeviceEventWithName:@"quickActionShortcut"
-                                                body:[notification userInfo]];
+                                                body:notification.userInfo];
 }
 
 - (NSDictionary *)constantsToExport
