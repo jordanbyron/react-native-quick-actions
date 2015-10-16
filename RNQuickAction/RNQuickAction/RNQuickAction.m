@@ -19,10 +19,6 @@ NSString *const RCTShortcutItemClicked = @"ShortcutItemClicked";
     NSDictionary *_initialGesture;
 }
 
-@synthesize bridge = _bridge;
-
-RCT_EXPORT_MODULE();
-
 - (instancetype)init
 {
     if ((self = [super init])) {
@@ -33,6 +29,10 @@ RCT_EXPORT_MODULE();
     }
     return self;
 }
+
+@synthesize bridge = _bridge;
+
+RCT_EXPORT_MODULE();
 
 - (void)setBridge:(RCTBridge *)bridge
 {
@@ -47,26 +47,25 @@ RCT_EXPORT_MODULE();
 
 + (void) onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
 {
-    NSLog(@"Quick action shortcut item pressed: %@", shortcutItem);
+    RCTLogInfo(@"[RNQuickAction] Quick action shortcut item pressed: %@", [shortcutItem type]);
     
-    NSDictionary *baseNotificationData = @{@"type": shortcutItem.type,
-                                           @"title": shortcutItem.localizedTitle,
-                                           @"userInfo": shortcutItem.userInfo?: @""
-                                           };
-    
-    NSMutableDictionary *notificationData = [NSMutableDictionary dictionaryWithDictionary:baseNotificationData];
+    NSDictionary *userInfo = @{
+        @"type": shortcutItem.type,
+        @"title": shortcutItem.localizedTitle,
+        @"userInfo": shortcutItem.userInfo ?: @{}
+    };
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RCTShortcutItemClicked
                                                         object:self
-                                                      userInfo:notificationData];
+                                                      userInfo:userInfo];
     
     completionHandler(YES);
 }
 
-- (void)handleQuickActionPress:(UIApplicationShortcutItem *) shortcutItem
+- (void)handleQuickActionPress:(NSNotification *) notification
 {
     [_bridge.eventDispatcher sendDeviceEventWithName:@"quickActionShortcut"
-                                                body:[shortcutItem userInfo]];
+                                                body:[notification userInfo]];
 }
 
 - (NSDictionary *)constantsToExport
