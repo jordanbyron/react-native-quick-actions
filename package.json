@@ -1,6 +1,6 @@
 {
   "name": "react-native-quick-actions",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A react-native interface for Touch 3D home screen quick actions",
   "main": "index.ios.js",
   "scripts": {
