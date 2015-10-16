@@ -90,6 +90,15 @@ var subscription = DeviceEventEmitter.addListener(
   });
 ```
 
+To get any actions sent when the app is cold-launched using the following code:
+
+```js
+var QuickActions = require('react-native-quick-actions');
+var data = QuickActions.popInitialGesture();
+
+doSomethingWithTheGesture(data);
+```
+
 ## License
 
 Copyright (c) 2015 Jordan Byron (http://github.com/jordanbyron/)
