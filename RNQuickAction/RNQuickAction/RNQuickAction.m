@@ -10,14 +10,18 @@
 #import "RCTConvert.h"
 #import "RCTEventDispatcher.h"
 #import "RNQuickAction.h"
+#import "RCTUtils.h"
 
 NSString *const RCTShortcutItemClicked = @"ShortcutItemClicked";
 
 @implementation RNQuickAction
-
-@synthesize bridge = _bridge;
+{
+    NSDictionary *_initialGesture;
+}
 
 RCT_EXPORT_MODULE();
+
+@synthesize bridge = _bridge;
 
 - (instancetype)init
 {
@@ -35,28 +39,40 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-+(void) onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
+- (void)setBridge:(RCTBridge *)bridge
 {
-    NSLog(@"Quick action shortcut item pressed: %@", shortcutItem);
+    _bridge = bridge;
+    _initialGesture = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
+}
+
++ (void) onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
+{
+    RCTLogInfo(@"[RNQuickAction] Quick action shortcut item pressed: %@", [shortcutItem type]);
     
-    NSDictionary *baseNotificationData = @{@"type": shortcutItem.type,
-                                           @"title": shortcutItem.localizedTitle,
-                                           @"userInfo": shortcutItem.userInfo?: @""
-                                           };
-    
-    NSMutableDictionary *notificationData = [NSMutableDictionary dictionaryWithDictionary:baseNotificationData];
+    NSDictionary *userInfo = @{
+        @"type": shortcutItem.type,
+        @"title": shortcutItem.localizedTitle,
+        @"userInfo": shortcutItem.userInfo ?: @{}
+    };
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RCTShortcutItemClicked
                                                         object:self
-                                                      userInfo:notificationData];
+                                                      userInfo:userInfo];
     
     completionHandler(YES);
 }
 
-- (void)handleQuickActionPress:(UIApplicationShortcutItem *) shortcutItem
+- (void)handleQuickActionPress:(NSNotification *) notification
 {
     [_bridge.eventDispatcher sendDeviceEventWithName:@"quickActionShortcut"
-                                                body:[shortcutItem userInfo]];
+                                                body:notification.userInfo];
+}
+
+- (NSDictionary *)constantsToExport
+{
+    return @{
+        @"initialGesture": RCTNullIfNil(_initialGesture),
+    };
 }
 
 @end
