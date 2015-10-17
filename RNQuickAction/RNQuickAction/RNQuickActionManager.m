@@ -9,14 +9,23 @@
 #import "RCTBridge.h"
 #import "RCTConvert.h"
 #import "RCTEventDispatcher.h"
-#import "RNQuickAction.h"
+#import "RNQuickActionManager.h"
 #import "RCTUtils.h"
 
 NSString *const RCTShortcutItemClicked = @"ShortcutItemClicked";
 
-@implementation RNQuickAction
+NSDictionary *RNQuickAction(UIApplicationShortcutItem *item) {
+    if (!item) return nil;
+    return @{
+        @"type": item.type,
+        @"title": item.localizedTitle,
+        @"userInfo": item.userInfo ?: @{}
+    };
+}
+
+@implementation RNQuickActionManager
 {
-    UIApplicationShortcutItem *_initialGesture;
+    UIApplicationShortcutItem *_initialAction;
 }
 
 RCT_EXPORT_MODULE();
@@ -42,23 +51,17 @@ RCT_EXPORT_MODULE();
 - (void)setBridge:(RCTBridge *)bridge
 {
     _bridge = bridge;
-    _initialGesture = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
+    _initialAction = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
 }
 
-+ (void) onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
++ (void)onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
 {
     RCTLogInfo(@"[RNQuickAction] Quick action shortcut item pressed: %@", [shortcutItem type]);
-    
-    NSDictionary *userInfo = @{
-        @"type": shortcutItem.type,
-        @"title": shortcutItem.localizedTitle,
-        @"userInfo": shortcutItem.userInfo ?: @{}
-    };
-    
+
     [[NSNotificationCenter defaultCenter] postNotificationName:RCTShortcutItemClicked
                                                         object:self
-                                                      userInfo:userInfo];
-    
+                                                      userInfo:RNQuickAction(shortcutItem)];
+
     completionHandler(YES);
 }
 
@@ -70,18 +73,8 @@ RCT_EXPORT_MODULE();
 
 - (NSDictionary *)constantsToExport
 {
-    NSDictionary *initialGesture;
-    
-    if(_initialGesture != nil) {
-      initialGesture = @{
-        @"type": _initialGesture.type,
-        @"title": _initialGesture.localizedTitle,
-        @"userInfo": _initialGesture.userInfo ?: @{}
-      };
-    }
-    
     return @{
-      @"initialGesture": RCTNullIfNil(initialGesture)
+      @"initialAction": RCTNullIfNil(RNQuickAction(_initialAction))
     };
 }
 

@@ -8,6 +8,6 @@
 
 #import "RCTBridgeModule.h"
 
-@interface RNQuickAction : NSObject <RCTBridgeModule>
+@interface RNQuickActionManager : NSObject <RCTBridgeModule>
 +(void) onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler;
 @end

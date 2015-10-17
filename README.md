@@ -29,10 +29,10 @@ Header Search Paths and make sure it's `recursive`.
 Lastly, add the following lines to your `AppDelegate.m` file:
 
 ```obj-c
-#import "RNQuickAction.h"
+#import "RNQuickActionManager.h"
 
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler {
-  [RNQuickAction onQuickActionPress:shortcutItem completionHandler:completionHandler];
+  [RNQuickActionManager onQuickActionPress:shortcutItem completionHandler:completionHandler];
 }
 ```
 
@@ -94,9 +94,10 @@ To get any actions sent when the app is cold-launched using the following code:
 
 ```js
 var QuickActions = require('react-native-quick-actions');
-var data = QuickActions.popInitialGesture();
-
-doSomethingWithTheGesture(data);
+var action = QuickActions.popInitialAction();
+if (action) {
+  doSomethingWithTheAction(action); // e.g. LinkingIOS.openURL(..)
+}
 ```
 
 ## License

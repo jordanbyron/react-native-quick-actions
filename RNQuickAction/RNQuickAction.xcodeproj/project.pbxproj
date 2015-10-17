@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		91090D8F1BB6C934009AE358 /* RNQuickAction.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 91090D8E1BB6C934009AE358 /* RNQuickAction.h */; };
-		91090D911BB6C934009AE358 /* RNQuickAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 91090D901BB6C934009AE358 /* RNQuickAction.m */; };
+		AD90517D1BD2EE4A00EFDEBC /* RNQuickActionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AD90517B1BD2EE4A00EFDEBC /* RNQuickActionManager.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,7 +17,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				91090D8F1BB6C934009AE358 /* RNQuickAction.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -26,8 +24,8 @@
 
 /* Begin PBXFileReference section */
 		91090D8B1BB6C934009AE358 /* libRNQuickAction.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNQuickAction.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		91090D8E1BB6C934009AE358 /* RNQuickAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNQuickAction.h; sourceTree = "<group>"; };
-		91090D901BB6C934009AE358 /* RNQuickAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNQuickAction.m; sourceTree = "<group>"; };
+		AD90517B1BD2EE4A00EFDEBC /* RNQuickActionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNQuickActionManager.m; sourceTree = "<group>"; };
+		AD90517C1BD2EE4A00EFDEBC /* RNQuickActionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNQuickActionManager.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +58,8 @@
 		91090D8D1BB6C934009AE358 /* RNQuickAction */ = {
 			isa = PBXGroup;
 			children = (
-				91090D8E1BB6C934009AE358 /* RNQuickAction.h */,
-				91090D901BB6C934009AE358 /* RNQuickAction.m */,
+				AD90517B1BD2EE4A00EFDEBC /* RNQuickActionManager.m */,
+				AD90517C1BD2EE4A00EFDEBC /* RNQuickActionManager.h */,
 			);
 			path = RNQuickAction;
 			sourceTree = "<group>";
@@ -123,7 +121,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91090D911BB6C934009AE358 /* RNQuickAction.m in Sources */,
+				AD90517D1BD2EE4A00EFDEBC /* RNQuickActionManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +165,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../node_modules/react-native/React/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -205,7 +203,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../node_modules/react-native/React/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -219,6 +217,7 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -232,6 +231,7 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
