@@ -65,6 +65,34 @@ A full list of available icons can be found here:
 
 _NOTE_: A bunch of these icons are iOS 9.1 only so YMMV on 9.0 devices.
 
+## Adding dynamic quick actions
+
+In order to add / remove dynamic actions during application lifecycle, you need to require `react-native-quick-actions` and call either `setShortcutItems` or `clearShortcutItems` (useful when user is logging out).
+
+```js
+var QuickActions = require('react-native-quick-actions');
+
+// Add few actions
+QuickActions.setShortcutItems([
+  {
+    type: "Orders", // Required
+    title: "See your orders", // Optional, if empty, `type` will be used instead
+    subtitle: "See orders you've made",
+    icon: "compose" // Pass any of UIApplicationShortcutIconType<name>
+    userInfo: {
+      url: "app://orders" // provide custom data, like in-app url you want to open
+    }
+  }
+]);
+
+// Clear them all
+QuickActions.clearShortcutItems();
+```
+
+In order to specify icon for your shortcut item, either include `UIApplicationShortcutIconType<name>`, e.g. for `UIApplicationShortcutIconTypeCompose` go with `compose` or define your asset name if you want to use image from a template (e.g. `my-custom-icon` if that's the name of image in `Images.xcassets`. Remember not to name your custom icons with any of `compose`, `play`, `pause`, `add`, `location`, `search` and `share`, otherwise system ones will be loaded instead).
+
+Full list of available icons has been already listed in the previous section.
+
 ## Listening for quick actions in your javascript code
 
 First, you'll need to make sure `DeviceEventEmitter` is added to the list of

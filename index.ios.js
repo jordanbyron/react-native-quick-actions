@@ -13,5 +13,19 @@ module.exports = {
     var initialAction = _initialAction;
     _initialAction = null;
     return initialAction;
+  },
+  
+  /**
+   * Adds shortcut items to application
+   */
+  setShortcutItems: function(icons) {
+    RNQuickActionManager.setShortcutItems(icons);
+  },
+  
+  /**
+   * Clears all previously set dynamic icons
+   */
+  clearShortcutItems: function() {
+    RNQuickActionManager.clearShortcutItems();
   }
 };
