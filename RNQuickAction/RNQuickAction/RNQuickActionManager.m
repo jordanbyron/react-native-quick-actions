@@ -86,7 +86,7 @@ RCT_EXPORT_MODULE();
                                                                   localizedTitle:item[@"title"] ?: item[@"type"]
                                                                localizedSubtitle:item[@"subtitle"]
                                                                             icon:shortcutIcon
-                                                                        userInfo:item[@"userInfo"]];
+                                                                        userInfo:item[@"userInfo"]]];
     }];
     
     return shortcutItems;
