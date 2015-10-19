@@ -55,7 +55,7 @@ RCT_EXPORT_MODULE();
 }
 
 // Map user passed array of UIApplicationShortcutItem
-- (NSArray*)dynamicShortcutIconsForPassedArray:(NSArray*)passedArray {
+- (NSArray*)dynamicShortcutItemsForPassedArray:(NSArray*)passedArray {
     NSDictionary *icons = @{
         @"compose": @(UIApplicationShortcutIconTypeCompose),
         @"play": @(UIApplicationShortcutIconTypePlay),
@@ -94,7 +94,7 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 {
-    NSArray *dynamicShortcuts = [self dynamicShortcutIconsForPassedArray:shortcutItems];
+    NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
     [UIApplication sharedApplication].shortcutItems = dynamicShortcuts;
 }
 
