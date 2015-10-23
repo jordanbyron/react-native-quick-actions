@@ -56,14 +56,16 @@ RCT_EXPORT_MODULE();
 
 // Map user passed array of UIApplicationShortcutItem
 - (NSArray*)dynamicShortcutItemsForPassedArray:(NSArray*)passedArray {
+    // FIXME: Dynamically map icons from UIApplicationShortcutIconType to / from their string counterparts
+    // so we don't have to update this list every time Apple adds new system icons.
     NSDictionary *icons = @{
-        @"compose": @(UIApplicationShortcutIconTypeCompose),
-        @"play": @(UIApplicationShortcutIconTypePlay),
-        @"pause": @(UIApplicationShortcutIconTypePause),
-        @"add": @(UIApplicationShortcutIconTypeAdd),
-        @"location": @(UIApplicationShortcutIconTypeLocation),
-        @"search": @(UIApplicationShortcutIconTypeSearch),
-        @"share": @(UIApplicationShortcutIconTypeShare)
+        @"Compose": @(UIApplicationShortcutIconTypeCompose),
+        @"Play": @(UIApplicationShortcutIconTypePlay),
+        @"Pause": @(UIApplicationShortcutIconTypePause),
+        @"Add": @(UIApplicationShortcutIconTypeAdd),
+        @"Location": @(UIApplicationShortcutIconTypeLocation),
+        @"Search": @(UIApplicationShortcutIconTypeSearch),
+        @"Share": @(UIApplicationShortcutIconTypeShare)
     };
     
     NSMutableArray *shortcutItems = [NSMutableArray new];

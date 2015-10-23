@@ -5,8 +5,6 @@ Support for the new Touch 3D home screen quick actions for your React Native app
 
 ![](http://i.imgur.com/holmBPD.png)
 
-_NOTE_: At this time only static quick actions are supported!
-
 ## Installing
 
 First cd into your project's directory and grab the latest version of this code:
@@ -15,16 +13,10 @@ First cd into your project's directory and grab the latest version of this code:
 $ npm install react-native-quick-actions --save
 ```
 
-In XCode add the library from `node_modules/react-native-quick-actions/RNQuickAction.xcodeproj` to your project then add `libRNQuickAction` to your project's __Build Phase__ > __Link Binary With Libraries__ list.
+## Usage
 
-![adding to XCode](http://brentvatne.ca/images/packaging/7-add-link.gif)
-
-Next you need to add tell XCode where it can find the RNQuickAction source.
-Open up the project, add
-`$(SRCROOT)/node_modules/react-native-quick-actions/RNQuickAction` to your
-Header Search Paths and make sure it's `recursive`.
-
-![](http://brentvatne.ca/images/packaging/4-header-search-paths.png)
+### Linking the Library
+In order to use quick actions you must first link the library to your project.  There's excellent documentation on how to do this in the [React Native Docs](http://facebook.github.io/react-native/docs/linking-libraries-ios.html#content). Make sure you do all steps including #3
 
 Lastly, add the following lines to your `AppDelegate.m` file:
 
@@ -36,7 +28,7 @@ Lastly, add the following lines to your `AppDelegate.m` file:
 }
 ```
 
-## Adding static quick actions
+### Adding static quick actions
 
 This part is pretty easy. There are a [bunch of
 tutorials](https://littlebitesofcocoa.com/79) and
@@ -47,6 +39,7 @@ Add these entries into to your `Info.plist` file and replace the generic stuff
 (Action Title, .action, etc):
 
 ```xml
+<key>UIApplicationShortcutItems</key>
 <array>
   <dict>
     <key>UIApplicationShortcutItemIconType</key>
@@ -65,7 +58,7 @@ A full list of available icons can be found here:
 
 _NOTE_: A bunch of these icons are iOS 9.1 only so YMMV on 9.0 devices.
 
-## Adding dynamic quick actions
+### Adding dynamic quick actions
 
 In order to add / remove dynamic actions during application lifecycle, you need to require `react-native-quick-actions` and call either `setShortcutItems` or `clearShortcutItems` (useful when user is logging out).
 
@@ -78,7 +71,7 @@ QuickActions.setShortcutItems([
     type: "Orders", // Required
     title: "See your orders", // Optional, if empty, `type` will be used instead
     subtitle: "See orders you've made",
-    icon: "compose" // Pass any of UIApplicationShortcutIconType<name>
+    icon: "Compose", // Pass any of UIApplicationShortcutIconType<name>
     userInfo: {
       url: "app://orders" // provide custom data, like in-app url you want to open
     }
@@ -89,11 +82,11 @@ QuickActions.setShortcutItems([
 QuickActions.clearShortcutItems();
 ```
 
-In order to specify icon for your shortcut item, either include `UIApplicationShortcutIconType<name>`, e.g. for `UIApplicationShortcutIconTypeCompose` go with `compose` or define your asset name if you want to use image from a template (e.g. `my-custom-icon` if that's the name of image in `Images.xcassets`. Remember not to name your custom icons with any of `compose`, `play`, `pause`, `add`, `location`, `search` and `share`, otherwise system ones will be loaded instead).
+In order to specify icon for your shortcut item, either include `UIApplicationShortcutIconType<name>`, e.g. for `UIApplicationShortcutIconTypeCompose` go with `Compose` or define your asset name if you want to use image from a template (e.g. `my-custom-icon` if that's the name of image in `Images.xcassets`. Remember not to name your custom icons the same as any system icons otherwise system ones will be loaded instead).
 
 Full list of available icons has been already listed in the previous section.
 
-## Listening for quick actions in your javascript code
+### Listening for quick actions in your javascript code
 
 First, you'll need to make sure `DeviceEventEmitter` is added to the list of
 requires for React.
