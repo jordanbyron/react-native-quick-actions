@@ -17,6 +17,6 @@
     "react-native": "^0.11.2"
   },
   "peerDependencies": {
-    "react-native": "0.*"
+    "react-native": "0.* || 0.15.0-rc"
   }
 }
