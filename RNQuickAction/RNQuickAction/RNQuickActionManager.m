@@ -51,7 +51,9 @@ RCT_EXPORT_MODULE();
 - (void)setBridge:(RCTBridge *)bridge
 {
     _bridge = bridge;
-    _initialAction = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
+    if ([UIApplicationShortcutItem class]) {
+        _initialAction = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
+    }
 }
 
 // Map user passed array of UIApplicationShortcutItem
