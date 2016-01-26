@@ -14,7 +14,7 @@ module.exports = {
     _initialAction = null;
     return initialAction;
   },
-  
+
   /**
    * Check if UIApplication Shortcuts are available
    */
@@ -34,14 +34,14 @@ module.exports = {
       });
     });
   },
-  
+
   /**
    * Adds shortcut items to application
    */
   setShortcutItems: function(icons) {
     RNQuickActionManager.setShortcutItems(icons);
   },
-  
+
   /**
    * Clears all previously set dynamic icons
    */
