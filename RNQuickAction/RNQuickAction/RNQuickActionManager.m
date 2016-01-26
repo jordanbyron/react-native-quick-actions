@@ -98,13 +98,17 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 {
-    NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
-    [UIApplication sharedApplication].shortcutItems = dynamicShortcuts;
+    if ([UIApplicationShortcutItem class]) {
+        NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
+        [UIApplication sharedApplication].shortcutItems = dynamicShortcuts;
+    }
 }
 
 RCT_EXPORT_METHOD(clearShortcutItems)
 {
-    [UIApplication sharedApplication].shortcutItems = nil;
+    if ([UIApplicationShortcutItem class]) {
+        [UIApplication sharedApplication].shortcutItems = nil;
+    }
 }
 
 + (void)onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
