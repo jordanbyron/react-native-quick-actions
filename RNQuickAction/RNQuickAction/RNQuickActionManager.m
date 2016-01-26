@@ -96,6 +96,15 @@ RCT_EXPORT_MODULE();
     return shortcutItems;
 }
 
+RCT_EXPORT_METHOD(isAvailable:(RCTResponseSenderBlock)callback)
+{
+    if ([UIApplicationShortcutItem class]) {
+        return callback(@[[NSNull null]]);
+    } else {
+        return callback(@[RCTMakeError(@"[RNQuickActions] UIApplication shortcuts are not available.", nil, nil)]);
+    }
+}
+
 RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 {
     if ([UIApplicationShortcutItem class]) {
