@@ -13,9 +13,8 @@
 #import "RCTUtils.h"
 
 NSString *const RCTShortcutItemClicked = @"ShortcutItemClicked";
-BOOL isAvailable = nil;
 
-NSDictionary *RNQuickAction(UIApplicationShortcutItem *item) {
+NSDictionary *RNQuickAction(RCTApplicationShortcutItem *item) {
     if (!item) return nil;
     return @{
         @"type": item.type,
@@ -24,18 +23,64 @@ NSDictionary *RNQuickAction(UIApplicationShortcutItem *item) {
     };
 }
 
+
+
+@implementation RCTApplicationShortcutItem
+
+-(instancetype)initWithType:(NSString *)type localizedTitle:(NSString *)localizedTitle localizedSubtitle:(nullable NSString *)localizedSubtitle icon:(nullable RCTApplicationShortcutIcon *)icon userInfo:(nullable NSDictionary *)userInfo;
+{
+    Class UIApplicationShortcutItemClass = NSClassFromString(@"UIApplicationShortcutItem");
+    if (NSClassFromString(@"UIApplicationShortcutItem")) {
+        return [[UIApplicationShortcutItemClass alloc] initWithType:type localizedTitle:localizedTitle localizedSubtitle:localizedSubtitle icon:icon userInfo:userInfo];
+    }
+    return self;
+}
+
+-(instancetype)initWithType:(NSString *)type localizedTitle:(NSString *)localizedTitle;
+{
+    Class UIApplicationShortcutItemClass = NSClassFromString(@"UIApplicationShortcutItem");
+    if (NSClassFromString(@"UIApplicationShortcutItem")) {
+        return [[UIApplicationShortcutItemClass alloc] initWithType:type localizedTitle:localizedTitle];
+    }
+    return self;
+}
+
+@end
+
+@implementation RCTApplicationShortcutIcon
+
++(instancetype)iconWithType:(NSNumber *)type
+{
+    Class UIApplicationShortcutIconClass = NSClassFromString(@"UIApplicationShortcutIcon");
+    if (NSClassFromString(@"UIApplicationShortcutIcon")) {
+        SEL s = NSSelectorFromString(@"iconWithType");
+        return objc_msgSend(UIApplicationShortcutIconClass, s, type);
+        //return [[UIApplicationShortcutIconClass alloc] iconWithType:[type intValue]];
+    }
+    return nil;
+}
+
++ (instancetype)iconWithTemplateImageName:(NSString *)templateImageName
+{
+    Class UIApplicationShortcutIconClass = NSClassFromString(@"UIApplicationShortcutIcon");
+    if (NSClassFromString(@"UIApplicationShortcutIcon")) {
+        SEL s = NSSelectorFromString(@"iconWithTemplateImageName");
+        return objc_msgSend(UIApplicationShortcutIconClass, s, templateImageName);
+//        return [[UIApplicationShortcutIconClass alloc] iconWithTemplateImageName:templateImageName];
+    }
+    return nil;
+}
+
+@end
+
 @implementation RNQuickActionManager
 {
-    UIApplicationShortcutItem *_initialAction;
+    RCTApplicationShortcutItem *_initialAction;
 }
 
 RCT_EXPORT_MODULE();
 
 @synthesize bridge = _bridge;
-
-+ (void)initialize {
-    isAvailable = [UIApplicationShortcutItem class] != nil;
-}
 
 - (instancetype)init
 {
@@ -56,25 +101,26 @@ RCT_EXPORT_MODULE();
 - (void)setBridge:(RCTBridge *)bridge
 {
     _bridge = bridge;
-    if (isAvailable) {
-        _initialAction = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
+    NSString *key = [RNQuickActionManager lookupStringConstant:@"UIApplicationLaunchOptionsShortcutItemKey"];
+    if (key) {
+       _initialAction = [bridge.launchOptions[key] copy];
     }
+
+}
+
++(NSNumber *)lookupNumberConstant:(NSString *)constantName
+{
+    void ** dataPtr = CFBundleGetDataPointerForName(CFBundleGetMainBundle(), (__bridge CFStringRef)constantName);
+    return (__bridge NSNumber *)(dataPtr ? *dataPtr : nil);
+}
++(NSString *)lookupStringConstant:(NSString *)constantName
+{
+    void ** dataPtr = CFBundleGetDataPointerForName(CFBundleGetMainBundle(), (__bridge CFStringRef)constantName);
+    return (__bridge NSString *)(dataPtr ? *dataPtr : nil);
 }
 
 // Map user passed array of UIApplicationShortcutItem
 - (NSArray*)dynamicShortcutItemsForPassedArray:(NSArray*)passedArray {
-    // FIXME: Dynamically map icons from UIApplicationShortcutIconType to / from their string counterparts
-    // so we don't have to update this list every time Apple adds new system icons.
-    NSDictionary *icons = @{
-        @"Compose": @(UIApplicationShortcutIconTypeCompose),
-        @"Play": @(UIApplicationShortcutIconTypePlay),
-        @"Pause": @(UIApplicationShortcutIconTypePause),
-        @"Add": @(UIApplicationShortcutIconTypeAdd),
-        @"Location": @(UIApplicationShortcutIconTypeLocation),
-        @"Search": @(UIApplicationShortcutIconTypeSearch),
-        @"Share": @(UIApplicationShortcutIconTypeShare)
-    };
-    
     NSMutableArray *shortcutItems = [NSMutableArray new];
     
     [passedArray enumerateObjectsUsingBlock:^(NSDictionary *item, NSUInteger idx, BOOL *stop) {
@@ -82,16 +128,17 @@ RCT_EXPORT_MODULE();
         
         // If passed iconName is enum, use system icon
         // Otherwise, load from bundle
-        UIApplicationShortcutIcon *shortcutIcon;
-        NSNumber *iconType = icons[iconName];
+        RCTApplicationShortcutIcon *shortcutIcon;
+        NSString *constantName = [@"NSApplicationShortcutIconType" stringByAppendingString:iconName];
+        NSNumber *iconType = [RNQuickActionManager lookupNumberConstant:constantName];
         
         if (iconType) {
-            shortcutIcon = [UIApplicationShortcutIcon iconWithType:[iconType intValue]];
+            shortcutIcon = [RCTApplicationShortcutIcon iconWithType:iconType];
         } else if (iconName) {
-            shortcutIcon = [UIApplicationShortcutIcon iconWithTemplateImageName:iconName];
+            shortcutIcon = [RCTApplicationShortcutIcon iconWithTemplateImageName:iconName];
         }
         
-        [shortcutItems addObject:[[UIApplicationShortcutItem alloc] initWithType:item[@"type"]
+        [shortcutItems addObject:[[RCTApplicationShortcutItem alloc] initWithType:item[@"type"]
                                                                   localizedTitle:item[@"title"] ?: item[@"type"]
                                                                localizedSubtitle:item[@"subtitle"]
                                                                             icon:shortcutIcon
@@ -101,31 +148,20 @@ RCT_EXPORT_MODULE();
     return shortcutItems;
 }
 
-RCT_EXPORT_METHOD(isAvailable:(RCTResponseSenderBlock)callback)
-{
-    if (isAvailable) {
-        return callback(@[[NSNull null]]);
-    } else {
-        return callback(@[RCTMakeError(@"[RNQuickActions] UIApplication shortcuts are not available.", nil, nil)]);
-    }
-}
-
 RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 {
-    if (isAvailable) {
-        NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
-        [UIApplication sharedApplication].shortcutItems = dynamicShortcuts;
-    }
+    NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
+    SEL s = NSSelectorFromString(@"setShortcutItems");
+    objc_msgSend([UIApplication sharedApplication], s, dynamicShortcuts);
 }
 
 RCT_EXPORT_METHOD(clearShortcutItems)
 {
-    if (isAvailable) {
-        [UIApplication sharedApplication].shortcutItems = nil;
-    }
+    SEL s = NSSelectorFromString(@"setShortcutItems");
+    objc_msgSend([UIApplication sharedApplication], s, nil);
 }
 
-+ (void)onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
++ (void)onQuickActionPress:(RCTApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
 {
     RCTLogInfo(@"[RNQuickAction] Quick action shortcut item pressed: %@", [shortcutItem type]);
 
