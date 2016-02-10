@@ -3,6 +3,8 @@ react-native home screen quick actions
 
 Support for the new Touch 3D home screen quick actions for your React Native apps!
 
+__This project currently only supports iOS 9+__
+
 ![](http://i.imgur.com/holmBPD.png)
 
 ## Installing
@@ -16,6 +18,7 @@ $ npm install react-native-quick-actions --save
 ## Usage
 
 ### Linking the Library
+
 In order to use quick actions you must first link the library to your project.  There's excellent documentation on how to do this in the [React Native Docs](http://facebook.github.io/react-native/docs/linking-libraries-ios.html#content). Make sure you do all steps including #3
 
 Lastly, add the following lines to your `AppDelegate.m` file:
@@ -55,8 +58,6 @@ Add these entries into to your `Info.plist` file and replace the generic stuff
 A full list of available icons can be found here:
 
 <https://developer.apple.com/library/prerelease/ios/documentation/UIKit/Reference/UIApplicationShortcutIcon_Class/index.html#//apple_ref/c/tdef/UIApplicationShortcutIconType>
-
-_NOTE_: A bunch of these icons are iOS 9.1 only so YMMV on 9.0 devices.
 
 ### Adding dynamic quick actions
 
