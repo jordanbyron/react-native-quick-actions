@@ -14,34 +14,14 @@ module.exports = {
     _initialAction = null;
     return initialAction;
   },
-
-  /**
-   * Check if UIApplication Shortcuts are available
-   */
-  isAvailable: function(callback) {
-    return new Promise(function(resolve, reject) {
-      RNQuickActionManager.isAvailable(function(error) {
-        if (error) {
-          if (callback) {
-            callback(false, error);
-          }
-          return reject(error);
-        }
-        if (callback) {
-          callback(true, error);
-        }
-        resolve(true);
-      });
-    });
-  },
-
+  
   /**
    * Adds shortcut items to application
    */
   setShortcutItems: function(icons) {
     RNQuickActionManager.setShortcutItems(icons);
   },
-
+  
   /**
    * Clears all previously set dynamic icons
    */

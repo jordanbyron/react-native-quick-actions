@@ -13,7 +13,6 @@
 #import "RCTUtils.h"
 
 NSString *const RCTShortcutItemClicked = @"ShortcutItemClicked";
-BOOL isAvailable = nil;
 
 NSDictionary *RNQuickAction(UIApplicationShortcutItem *item) {
     if (!item) return nil;
@@ -32,10 +31,6 @@ NSDictionary *RNQuickAction(UIApplicationShortcutItem *item) {
 RCT_EXPORT_MODULE();
 
 @synthesize bridge = _bridge;
-
-+ (void)initialize {
-    isAvailable = [UIApplicationShortcutItem class] != nil;
-}
 
 - (instancetype)init
 {
@@ -56,9 +51,7 @@ RCT_EXPORT_MODULE();
 - (void)setBridge:(RCTBridge *)bridge
 {
     _bridge = bridge;
-    if (isAvailable) {
-        _initialAction = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
-    }
+    _initialAction = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
 }
 
 // Map user passed array of UIApplicationShortcutItem
@@ -101,28 +94,15 @@ RCT_EXPORT_MODULE();
     return shortcutItems;
 }
 
-RCT_EXPORT_METHOD(isAvailable:(RCTResponseSenderBlock)callback)
-{
-    if (isAvailable) {
-        return callback(@[[NSNull null]]);
-    } else {
-        return callback(@[RCTMakeError(@"[RNQuickActions] UIApplication shortcuts are not available.", nil, nil)]);
-    }
-}
-
 RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 {
-    if (isAvailable) {
-        NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
-        [UIApplication sharedApplication].shortcutItems = dynamicShortcuts;
-    }
+    NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
+    [UIApplication sharedApplication].shortcutItems = dynamicShortcuts;
 }
 
 RCT_EXPORT_METHOD(clearShortcutItems)
 {
-    if (isAvailable) {
-        [UIApplication sharedApplication].shortcutItems = nil;
-    }
+    [UIApplication sharedApplication].shortcutItems = nil;
 }
 
 + (void)onQuickActionPress:(UIApplicationShortcutItem *) shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler
