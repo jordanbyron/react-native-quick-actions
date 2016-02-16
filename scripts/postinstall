@@ -1,9 +1,0 @@
-#!/usr/bin/env sh
-
-echo "----------------------------------------------------------------------"
-echo " Thanks for installing react-native-quick-actions!"
-echo "" # Blank line
-echo " To finish adding this to your project follow these instructions"
-echo "" # Blank line
-echo " https://github.com/jordanbyron/react-native-quick-actions#installing"
-echo "----------------------------------------------------------------------"
