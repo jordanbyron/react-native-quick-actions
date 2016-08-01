@@ -122,6 +122,21 @@ if (action) {
 }
 ```
 
+### Check if 3d touch is supported
+
+Returns true if device supports 3d touch and 3d touch is not disabled.
+
+```
+var QuickActions = require('react-native-quick-actions');
+
+QuickActions.isSupported(function(error, supported) {
+  if (!supported) {
+    console.log('Device does not support 3d touch or 3d touch is disabled.');
+  }
+});
+
+```
+
 ## License
 
 Copyright (c) 2015 Jordan Byron (http://github.com/jordanbyron/)

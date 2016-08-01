@@ -67,30 +67,30 @@ RCT_EXPORT_MODULE();
         @"Search": @(UIApplicationShortcutIconTypeSearch),
         @"Share": @(UIApplicationShortcutIconTypeShare)
     };
-    
+
     NSMutableArray *shortcutItems = [NSMutableArray new];
-    
+
     [passedArray enumerateObjectsUsingBlock:^(NSDictionary *item, NSUInteger idx, BOOL *stop) {
         NSString *iconName = item[@"icon"];
-        
+
         // If passed iconName is enum, use system icon
         // Otherwise, load from bundle
         UIApplicationShortcutIcon *shortcutIcon;
         NSNumber *iconType = icons[iconName];
-        
+
         if (iconType) {
             shortcutIcon = [UIApplicationShortcutIcon iconWithType:[iconType intValue]];
         } else if (iconName) {
             shortcutIcon = [UIApplicationShortcutIcon iconWithTemplateImageName:iconName];
         }
-        
+
         [shortcutItems addObject:[[UIApplicationShortcutItem alloc] initWithType:item[@"type"]
                                                                   localizedTitle:item[@"title"] ?: item[@"type"]
                                                                localizedSubtitle:item[@"subtitle"]
                                                                             icon:shortcutIcon
                                                                         userInfo:item[@"userInfo"]]];
     }];
-    
+
     return shortcutItems;
 }
 
@@ -98,6 +98,13 @@ RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 {
     NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
     [UIApplication sharedApplication].shortcutItems = dynamicShortcuts;
+}
+
+RCT_EXPORT_METHOD(isSupported:(RCTResponseSenderBlock)callback)
+{
+    BOOL supported = [[UIApplication sharedApplication].keyWindow.rootViewController.traitCollection forceTouchCapability] == UIForceTouchCapabilityAvailable;
+
+    callback(@[[NSNull null], [NSNumber numberWithBool:supported]]);
 }
 
 RCT_EXPORT_METHOD(clearShortcutItems)
