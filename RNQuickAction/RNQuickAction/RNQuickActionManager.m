@@ -102,7 +102,7 @@ RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 
 RCT_EXPORT_METHOD(isSupported:(RCTResponseSenderBlock)callback)
 {
-    BOOL supported = [[UIApplication sharedApplication].keyWindow.rootViewController.traitCollection forceTouchCapability] == UIForceTouchCapabilityAvailable;
+    BOOL supported = [[UIApplication sharedApplication].delegate.window.rootViewController.traitCollection forceTouchCapability] == UIForceTouchCapabilityAvailable;
 
     callback(@[[NSNull null], [NSNumber numberWithBool:supported]]);
 }
