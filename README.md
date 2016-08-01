@@ -1,7 +1,7 @@
 react-native home screen quick actions
 ======================================
 
-Support for the new Touch 3D home screen quick actions for your React Native apps!
+Support for the new 3D Touch home screen quick actions for your React Native apps!
 
 __This project currently only supports iOS 9+__
 
@@ -122,16 +122,18 @@ if (action) {
 }
 ```
 
-### Check if 3d touch is supported
+### Check if 3D Touch is supported
 
-Returns true if device supports 3d touch and 3d touch is not disabled.
+The following function will alert you if the user's device supports 3D Touch. Please
+note this project currently only supports iOS 9+ which means this code will not
+work on iOS devices running versions < 9.0.
 
-```javascript
+```js
 var QuickActions = require('react-native-quick-actions');
 
 QuickActions.isSupported(function(error, supported) {
   if (!supported) {
-    console.log('Device does not support 3d touch or 3d touch is disabled.');
+    console.log('Device does not support 3D Touch or 3D Touch is disabled.');
   }
 });
 
