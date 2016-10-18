@@ -2,7 +2,7 @@
   "name": "react-native-quick-actions",
   "version": "0.1.4",
   "description": "A react-native interface for Touch 3D home screen quick actions",
-  "main": "index.ios.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jordanbyron/react-native-quick-actions"
