@@ -1,5 +1,5 @@
 var RNQuickActionManager = require('react-native').NativeModules.RNQuickActionManager;
-var _initialAction = RNQuickActionManager.initialAction;
+var _initialAction = RNQuickActionManager && RNQuickActionManager.initialAction;
 
 module.exports = {
   /**
