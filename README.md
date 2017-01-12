@@ -7,6 +7,13 @@ __This project currently only supports iOS 9+__
 
 ![](http://i.imgur.com/holmBPD.png)
 
+## Supported React Native Versions
+
+| React Native version(s) | Supporting react-native-quick-actions version(s) |
+|-------------------------|--------------------------------------------------|
+| < v0.40                   | v0.1.5                                         |
+| v0.40+                    | v0.2.0+                                        |
+
 ## Installing
 
 First cd into your project's directory and grab the latest version of this code:
