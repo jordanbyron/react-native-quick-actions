@@ -65,7 +65,29 @@ RCT_EXPORT_MODULE();
         @"Add": @(UIApplicationShortcutIconTypeAdd),
         @"Location": @(UIApplicationShortcutIconTypeLocation),
         @"Search": @(UIApplicationShortcutIconTypeSearch),
-        @"Share": @(UIApplicationShortcutIconTypeShare)
+        @"Share": @(UIApplicationShortcutIconTypeShare),
+        @"Prohibit": @(UIApplicationShortcutIconTypeProhibit),
+        @"Contact": @(UIApplicationShortcutIconTypeContact),
+        @"Home": @(UIApplicationShortcutIconTypeHome),
+        @"MarkLocation": @(UIApplicationShortcutIconTypeMarkLocation),
+        @"Favorite": @(UIApplicationShortcutIconTypeFavorite),
+        @"Love": @(UIApplicationShortcutIconTypeLove),
+        @"Cloud": @(UIApplicationShortcutIconTypeCloud),
+        @"Invitation": @(UIApplicationShortcutIconTypeInvitation),
+        @"Confirmation": @(UIApplicationShortcutIconTypeConfirmation),
+        @"Mail": @(UIApplicationShortcutIconTypeMail),
+        @"Message": @(UIApplicationShortcutIconTypeMessage),
+        @"Date": @(UIApplicationShortcutIconTypeDate),
+        @"Time": @(UIApplicationShortcutIconTypeTime),
+        @"CapturePhoto": @(UIApplicationShortcutIconTypeCapturePhoto),
+        @"CaptureVideo": @(UIApplicationShortcutIconTypeCaptureVideo),
+        @"Task": @(UIApplicationShortcutIconTypeTask),
+        @"TaskCompleted": @(UIApplicationShortcutIconTypeTaskCompleted),
+        @"Alarm": @(UIApplicationShortcutIconTypeAlarm),
+        @"Bookmark": @(UIApplicationShortcutIconTypeBookmark),
+        @"Shuffle": @(UIApplicationShortcutIconTypeShuffle),
+        @"Audio": @(UIApplicationShortcutIconTypeAudio),
+        @"Update": @(UIApplicationShortcutIconTypeUpdate)
     };
 
     NSMutableArray *shortcutItems = [NSMutableArray new];
