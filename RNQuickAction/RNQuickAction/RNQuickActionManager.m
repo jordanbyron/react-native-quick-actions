@@ -6,10 +6,10 @@
 //  Copyright © 2015 react-native. All rights reserved.
 //
 
-#import <React/RCTBridge.h>
-#import <React/RCTConvert.h>
-#import <React/RCTEventDispatcher.h>
-#import <React/RCTUtils.h>
+#import "RCTBridge.h"
+#import "RCTConvert.h"
+#import "RCTEventDispatcher.h"
+#import "RCTUtils.h"
 #import "RNQuickActionManager.h"
 
 NSString *const RCTShortcutItemClicked = @"ShortcutItemClicked";
