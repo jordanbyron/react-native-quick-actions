@@ -155,16 +155,7 @@ To get any actions sent when the app is cold-launched using the following code:
 ```js
 var QuickActions = require('react-native-quick-actions');
 
-if (Platform.OS === 'ios') {
-  const initialAction: QuickActionShortcut = popInitialAction()
-  if (initialAction) {
-    doSomethingWithTheAction(initialAction)
-  }
-} else if (Platform.OS === 'android') {
-  popInitialAction()
-    .then(doSomethingWithTheAction)
-    .catch(console.error)
-}
+popInitialAction().then(doSomethingWithTheAction).catch(console.error)
 ```
 
 ### Check if 3D Touch is supported

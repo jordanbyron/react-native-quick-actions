@@ -10,9 +10,11 @@ module.exports = {
    * action object, or `null`. Subsequent invocations will return null.
    */
   popInitialAction: function() {
-    var initialAction = _initialAction;
-    _initialAction = null;
-    return initialAction;
+    return new Promise((resolve) => {
+      var initialAction = _initialAction;
+      _initialAction = null;
+      resolve(initialAction);
+    })
   },
 
   /**
