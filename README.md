@@ -3,7 +3,7 @@ react-native home screen quick actions
 
 Support for the new 3D Touch home screen quick actions for your React Native apps!
 
-__This project currently only supports iOS 9+__
+__This project currently supports iOS 9+ and Android 7__
 
 ![](http://i.imgur.com/holmBPD.png)
 
@@ -24,7 +24,7 @@ $ npm install react-native-quick-actions --save
 
 ## Usage
 
-### Linking the Library
+### Linking the Library for iOS
 
 In order to use quick actions you must first link the library to your project.  There's excellent documentation on how to do this in the [React Native Docs](http://facebook.github.io/react-native/docs/linking-libraries-ios.html#content). Make sure you do all steps including #3
 
@@ -38,7 +38,38 @@ Lastly, add the following lines to your `AppDelegate.m` file:
 }
 ```
 
-### Adding static quick actions
+### Linking the Library for Android
+
+First, add the following line in `settings.gradle`
+```
+include ':app',
+        ...
+        ':react-native-quick-actions'
+
+project(':react-native-quick-actions').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-quick-actions/android')
+```
+
+Secondly, add the following line in app `build.gradle`
+```
+dependencies {
+    ...
+    compile project(':react-native-quick-actions')
+}
+```
+
+Lastly, add the following lines in your main Application
+```
+import com.drivetribe.AppShortcuts.AppShortcutsPackage;
+
+protected List<ReactPackage> getPackages() {
+    return Arrays.asList(
+        ...
+        new AppShortcutsPackage()
+    );
+}
+```
+
+### Adding static quick actions - iOS only
 
 This part is pretty easy. There are a [bunch of
 tutorials](https://littlebitesofcocoa.com/79) and
@@ -123,9 +154,16 @@ To get any actions sent when the app is cold-launched using the following code:
 
 ```js
 var QuickActions = require('react-native-quick-actions');
-var action = QuickActions.popInitialAction();
-if (action) {
-  doSomethingWithTheAction(action); // e.g. LinkingIOS.openURL(..)
+
+if (Platform.OS === 'ios') {
+  const initialAction: QuickActionShortcut = popInitialAction()
+  if (initialAction) {
+    doSomethingWithTheAction(initialAction)
+  }
+} else if (Platform.OS === 'android') {
+  popInitialAction()
+    .then(doSomethingWithTheAction)
+    .catch(console.error)
 }
 ```
 

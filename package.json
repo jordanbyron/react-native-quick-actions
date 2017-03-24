@@ -1,15 +1,12 @@
 {
-  "name": "react-native-quick-actions",
-  "version": "0.2.1",
+  "name": "@drivetribe/react-native-quick-actions",
+  "version": "0.3.2",
   "description": "A react-native interface for Touch 3D home screen quick actions",
-  "main": "index.ios.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jordanbyron/react-native-quick-actions"
+    "url": "https://github.com/drivetribe/react-native-quick-actions"
   },
+  "nativePackage": true,
   "author": "Jordan Byron <jordan.byron@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "react-native": "^0.40"
-  }
+  "license": "MIT"
 }
