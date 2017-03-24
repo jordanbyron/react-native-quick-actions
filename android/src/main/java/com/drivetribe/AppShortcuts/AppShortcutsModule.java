@@ -11,26 +11,31 @@ import android.os.Build;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppShortcutsModule extends ReactContextBaseJavaModule {
+@ReactModule(name = AppShortcutsModule.REACT_NAME)
+class AppShortcutsModule extends ReactContextBaseJavaModule {
 
+    static final String REACT_NAME = "ReactAppShortcuts";
+
+    private static final String ACTION_SHORTCUT = "ACTION_SHORTCUT";
     private static final String SHORTCUT_TYPE = "SHORTCUT_TYPE";
 
     private List<ShortcutItem> mShortcutItems;
 
-    public AppShortcutsModule(ReactApplicationContext reactContext) {
+    AppShortcutsModule(ReactApplicationContext reactContext) {
         super(reactContext);
 
         reactContext.addActivityEventListener(new ActivityEventListener() {
@@ -48,7 +53,7 @@ public class AppShortcutsModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "ReactAppShortcuts";
+        return REACT_NAME;
     }
 
     @ReactMethod
@@ -60,10 +65,13 @@ public class AppShortcutsModule extends ReactContextBaseJavaModule {
 
             if (currentActivity != null) {
                 Intent intent = currentActivity.getIntent();
-                String type = intent.getStringExtra(SHORTCUT_TYPE);
-                if (type != null) {
-                    map = Arguments.createMap();
-                    map.putString("type", type);
+
+                if (ACTION_SHORTCUT.equals(intent.getAction())) {
+                    String type = intent.getStringExtra(SHORTCUT_TYPE);
+                    if (type != null) {
+                        map = Arguments.createMap();
+                        map.putString("type", type);
+                    }
                 }
             }
 
@@ -101,7 +109,7 @@ public class AppShortcutsModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void isSupported(com.facebook.react.bridge.Callback callback) {
+    public void isSupported(Callback callback) {
         if (callback != null) {
             callback.invoke(null, Build.VERSION.SDK_INT >= 25);
         }
@@ -117,7 +125,7 @@ public class AppShortcutsModule extends ReactContextBaseJavaModule {
         int iconResId = context.getResources()
                 .getIdentifier(item.icon, "drawable", context.getPackageName());
         Intent intent = new Intent(context, getCurrentActivity().getClass());
-        intent.setAction(Intent.ACTION_VIEW);
+        intent.setAction(ACTION_SHORTCUT);
         intent.putExtra(SHORTCUT_TYPE, item.type);
 
         return new ShortcutInfo.Builder(context, id)
@@ -147,47 +155,6 @@ public class AppShortcutsModule extends ReactContextBaseJavaModule {
             }
         }
         return null;
-    }
-
-    static class UserInfo {
-        public String url;
-
-        static public UserInfo fromReadableMap(ReadableMap map) {
-            final UserInfo info = new UserInfo();
-            info.url = map.getString("url");
-            return info;
-        }
-
-        public WritableMap toWritableMap() {
-            WritableMap map = Arguments.createMap();
-            map.putString("url", url);
-            return map;
-        }
-    }
-
-    static class ShortcutItem {
-        public String type;
-        public String title;
-        public String icon;
-        public UserInfo userInfo;
-
-        static public ShortcutItem fromReadableMap(ReadableMap map) {
-            final ShortcutItem item = new ShortcutItem();
-            item.type = map.getString("type");
-            item.title = map.getString("title");
-            item.icon = map.getString("icon");
-            item.userInfo = UserInfo.fromReadableMap(map.getMap("userInfo"));
-            return item;
-        }
-
-        public WritableMap toWritableMap() {
-            WritableMap map = Arguments.createMap();
-            map.putString("type", type);
-            map.putString("title", title);
-            map.putString("icon", icon);
-            map.putMap("userInfo", userInfo.toWritableMap());
-            return map;
-        }
     }
 
 }

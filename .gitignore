@@ -3,8 +3,9 @@
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 ## Android Studio
-.idea/
-android.iml
+*.iml
+.idea
+.gradle
 local.properties
 
 ## Build generated
