@@ -1,4 +1,4 @@
-package com.drivetribe.AppShortcuts;
+package com.reactNativeQuickActions;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;

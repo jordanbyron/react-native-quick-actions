@@ -1,4 +1,4 @@
-package com.drivetribe.AppShortcuts;
+package com.reactNativeQuickActions;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

@@ -43,7 +43,6 @@ Lastly, add the following lines to your `AppDelegate.m` file:
 First, add the following line in `settings.gradle`
 ```
 include ':app',
-        ...
         ':react-native-quick-actions'
 
 project(':react-native-quick-actions').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-quick-actions/android')
@@ -155,7 +154,7 @@ To get any actions sent when the app is cold-launched using the following code:
 ```js
 var QuickActions = require('react-native-quick-actions');
 
-popInitialAction().then(doSomethingWithTheAction).catch(console.error)
+QuickActions.popInitialAction().then(doSomethingWithTheAction).catch(console.error)
 ```
 
 ### Check if 3D Touch is supported

@@ -1,4 +1,4 @@
-package com.drivetribe.AppShortcuts;
+package com.reactNativeQuickActions;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableMap;
