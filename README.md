@@ -3,6 +3,8 @@ react-native home screen quick actions
 
 Support for the new 3D Touch home screen quick actions for your React Native apps!
 
+Please note that on Android if `android:launchMode` is set to default value `standard` in AndroidManifest.xml, the app will be re-created each time when app is being brought back from background and it won't receive `quickActionShortcut` event from DeviceEventEmitter, instead `popInitialAction` will be receiving the app shortcut event.
+
 __This project currently supports iOS 9+ and Android 7__
 
 ![](http://i.imgur.com/holmBPD.png)
