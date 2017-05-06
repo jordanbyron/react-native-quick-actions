@@ -1,5 +1,4 @@
-var RNQuickActionManager = require('react-native').NativeModules.RNQuickActionManager;
-var _initialAction = RNQuickActionManager && RNQuickActionManager.initialAction;
+var ReactAppShortcuts = require('react-native').NativeModules.ReactAppShortcuts;
 
 module.exports = {
   /**
@@ -10,31 +9,27 @@ module.exports = {
    * action object, or `null`. Subsequent invocations will return null.
    */
   popInitialAction: function() {
-    return new Promise((resolve) => {
-      var initialAction = _initialAction;
-      _initialAction = null;
-      resolve(initialAction);
-    })
+    return ReactAppShortcuts.popInitialAction();
   },
 
   /**
    * Adds shortcut items to application
    */
   setShortcutItems: function(items) {
-    RNQuickActionManager.setShortcutItems(items);
+    ReactAppShortcuts.setShortcutItems(items);
   },
 
   /**
    * Clears all previously set dynamic icons
    */
   clearShortcutItems: function() {
-    RNQuickActionManager.clearShortcutItems();
+    ReactAppShortcuts.clearShortcutItems();
   },
 
   /**
    * Check if quick actions are supported
    */
    isSupported: function(callback) {
-     RNQuickActionManager.isSupported(callback);
+     ReactAppShortcuts.isSupported(callback);
    }
 };
