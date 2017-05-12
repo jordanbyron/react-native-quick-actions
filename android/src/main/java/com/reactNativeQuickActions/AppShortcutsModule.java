@@ -85,8 +85,9 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
     @ReactMethod
     @TargetApi(25)
     public void setShortcutItems(ReadableArray items) {
-        if (items.size() == 0)
+        if (!isShortcutSupported() || items.size() == 0) {
             return;
+        }
 
         Context context = getReactApplicationContext();
         mShortcutItems = new ArrayList<>(items.size());
@@ -95,48 +96,49 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
         for (int i = 0; i < items.size(); i++) {
             ShortcutItem item = ShortcutItem.fromReadableMap(items.getMap(i));
             mShortcutItems.add(item);
-            shortcuts.add(createShortcutInfo(context, item, "id" + i));
+
+            int iconResId = context.getResources()
+                    .getIdentifier(item.icon, "drawable", context.getPackageName());
+            Intent intent = new Intent(context, getCurrentActivity().getClass());
+            intent.setAction(ACTION_SHORTCUT);
+            intent.putExtra(SHORTCUT_TYPE, item.type);
+
+            shortcuts.add(new ShortcutInfo.Builder(context, "id" + i)
+                    .setShortLabel(item.title)
+                    .setLongLabel(item.title)
+                    .setIcon(Icon.createWithResource(context, iconResId))
+                    .setIntent(intent)
+                    .build());
         }
 
-        getShortcutManager().setDynamicShortcuts(shortcuts);
+        getReactApplicationContext().getSystemService(ShortcutManager.class)
+                .setDynamicShortcuts(shortcuts);
     }
 
     @ReactMethod
     @TargetApi(25)
     public void clearShortcutItems() {
-        getShortcutManager().removeAllDynamicShortcuts();
+        getReactApplicationContext().getSystemService(ShortcutManager.class)
+                .removeAllDynamicShortcuts();
         mShortcutItems = null;
     }
 
     @ReactMethod
     public void isSupported(Callback callback) {
         if (callback != null) {
-            callback.invoke(null, Build.VERSION.SDK_INT >= 25);
+            callback.invoke(null, isShortcutSupported());
         }
     }
 
-    @TargetApi(25)
-    private ShortcutManager getShortcutManager() {
-        return getReactApplicationContext().getSystemService(ShortcutManager.class);
-    }
-
-    @TargetApi(25)
-    private ShortcutInfo createShortcutInfo(Context context, ShortcutItem item, String id) {
-        int iconResId = context.getResources()
-                .getIdentifier(item.icon, "drawable", context.getPackageName());
-        Intent intent = new Intent(context, getCurrentActivity().getClass());
-        intent.setAction(ACTION_SHORTCUT);
-        intent.putExtra(SHORTCUT_TYPE, item.type);
-
-        return new ShortcutInfo.Builder(context, id)
-                .setShortLabel(item.title)
-                .setLongLabel(item.title)
-                .setIcon(Icon.createWithResource(context, iconResId))
-                .setIntent(intent)
-                .build();
+    private boolean isShortcutSupported() {
+        return Build.VERSION.SDK_INT >= 25;
     }
 
     private void sendJSEvent(Intent intent) {
+        if (!isShortcutSupported()) {
+            return;
+        }
+
         String type = intent.getStringExtra(SHORTCUT_TYPE);
         ShortcutItem item = getShortcutItem(type);
         if (item != null) {
