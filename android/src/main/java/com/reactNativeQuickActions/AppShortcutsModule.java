@@ -135,7 +135,7 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
     }
 
     private void sendJSEvent(Intent intent) {
-        if (!isShortcutSupported()) {
+        if (!ACTION_SHORTCUT.equals(intent.getAction()) || !isShortcutSupported()) {
             return;
         }
 
