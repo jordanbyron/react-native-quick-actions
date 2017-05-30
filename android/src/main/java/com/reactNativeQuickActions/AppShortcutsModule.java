@@ -111,7 +111,7 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
                     .build());
         }
 
-        getShortcutManager().setDynamicShortcuts(shortcuts);
+        getReactApplicationContext().getSystemService(ShortcutManager.class).setDynamicShortcuts(shortcuts);
     }
 
     @ReactMethod
@@ -121,7 +121,7 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        getShortcutManager().removeAllDynamicShortcuts();
+        getReactApplicationContext().getSystemService(ShortcutManager.class).removeAllDynamicShortcuts();
         mShortcutItems = null;
     }
 
@@ -134,11 +134,6 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
 
     private boolean isShortcutSupported() {
         return Build.VERSION.SDK_INT >= 25;
-    }
-
-    @TargetApi(25)
-    private ShortcutManager getShortcutManager() {
-        return getReactApplicationContext().getSystemService(ShortcutManager.class);
     }
 
     private void sendJSEvent(Intent intent) {
