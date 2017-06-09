@@ -89,6 +89,11 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
             return;
         }
 
+        Activity currentActivity = getCurrentActivity();
+        if (currentActivity == null) {
+            return;
+        }
+
         Context context = getReactApplicationContext();
         mShortcutItems = new ArrayList<>(items.size());
         List<ShortcutInfo> shortcuts = new ArrayList<>(items.size());
@@ -99,7 +104,7 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
 
             int iconResId = context.getResources()
                     .getIdentifier(item.icon, "drawable", context.getPackageName());
-            Intent intent = new Intent(context, getCurrentActivity().getClass());
+            Intent intent = new Intent(context, currentActivity.getClass());
             intent.setAction(ACTION_SHORTCUT);
             intent.putExtra(SHORTCUT_TYPE, item.type);
 
