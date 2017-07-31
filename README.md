@@ -35,9 +35,13 @@ Lastly, add the following lines to your `AppDelegate.m` file:
 ```obj-c
 #import "RNQuickActionManager.h"
 
+// @implementation AppDelegate
+
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler {
   [RNQuickActionManager onQuickActionPress:shortcutItem completionHandler:completionHandler];
 }
+
+// @end
 ```
 
 ### Linking the Library for Android
