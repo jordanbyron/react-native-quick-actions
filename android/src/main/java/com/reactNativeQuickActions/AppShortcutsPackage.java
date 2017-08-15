@@ -16,7 +16,6 @@ public class AppShortcutsPackage implements ReactPackage {
         return Collections.<NativeModule>singletonList(new AppShortcutsModule(reactContext));
     }
 
-    @Override
     public List<Class<? extends JavaScriptModule>> createJSModules() {
         return Collections.emptyList();
     }
