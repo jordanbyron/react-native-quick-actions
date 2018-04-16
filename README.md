@@ -130,6 +130,14 @@ In order to specify icon for your shortcut item, either include `UIApplicationSh
 
 Full list of available icons has been already listed in the previous section.
 
+For Android icons, names must contain only lowercase a-z, 0-9, or underscore. So `guide_icon.png` would be acceptable but `guide-icon.png` would not be. Place your icons in res/drawable folder and set them when you create your shortcuts in setShortcutItems in the following way 
+```js
+{
+  ...
+  icon: "guide_icon",
+  ...
+}
+```
 ### Listening for quick actions in your javascript code
 
 First, you'll need to make sure `DeviceEventEmitter` is added to the list of
