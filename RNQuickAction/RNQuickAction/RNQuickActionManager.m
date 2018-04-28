@@ -123,6 +123,11 @@ RCT_EXPORT_MODULE();
     return shortcutItems;
 }
 
+RCT_EXPORT_METHOD(getInitialAction:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve(_shortcutItem);
+}
+
 RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 {
     NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
@@ -157,13 +162,6 @@ RCT_EXPORT_METHOD(clearShortcutItems)
     _shortcutItem = notification.userInfo;
     [_bridge.eventDispatcher sendDeviceEventWithName:@"quickActionShortcut"
                                                 body:_shortcutItem];
-}
-
-- (NSDictionary *)constantsToExport
-{
-    return @{
-      @"initialAction": RCTNullIfNil(_shortcutItem)
-    };
 }
 
 @end
