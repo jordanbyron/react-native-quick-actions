@@ -106,6 +106,7 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
                     .getIdentifier(item.icon, "drawable", context.getPackageName());
             Intent intent = new Intent(context, currentActivity.getClass());
             intent.setAction(ACTION_SHORTCUT);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra(SHORTCUT_TYPE, item.type);
 
             shortcuts.add(new ShortcutInfo.Builder(context, "id" + i)
