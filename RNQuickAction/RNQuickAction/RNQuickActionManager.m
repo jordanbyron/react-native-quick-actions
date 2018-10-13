@@ -25,7 +25,7 @@ NSDictionary *RNQuickAction(UIApplicationShortcutItem *item) {
 
 @implementation RNQuickActionManager
 {
-    UIApplicationShortcutItem *_initialAction;
+    NSDictionary *_shortcutItem;
 }
 
 RCT_EXPORT_MODULE();
@@ -59,7 +59,6 @@ RCT_EXPORT_MODULE();
 - (void)setBridge:(RCTBridge *)bridge
 {
     _bridge = bridge;
-    _initialAction = [bridge.launchOptions[UIApplicationLaunchOptionsShortcutItemKey] copy];
 }
 
 // Map user passed array of UIApplicationShortcutItem
@@ -124,6 +123,11 @@ RCT_EXPORT_MODULE();
     return shortcutItems;
 }
 
+RCT_EXPORT_METHOD(getInitialAction:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve(_shortcutItem);
+}
+
 RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 {
     NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
@@ -155,15 +159,9 @@ RCT_EXPORT_METHOD(clearShortcutItems)
 
 - (void)handleQuickActionPress:(NSNotification *) notification
 {
+    _shortcutItem = notification.userInfo;
     [_bridge.eventDispatcher sendDeviceEventWithName:@"quickActionShortcut"
-                                                body:notification.userInfo];
-}
-
-- (NSDictionary *)constantsToExport
-{
-    return @{
-      @"initialAction": RCTNullIfNil(RNQuickAction(_initialAction))
-    };
+                                                body:_shortcutItem];
 }
 
 @end
