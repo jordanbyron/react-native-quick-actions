@@ -21,58 +21,18 @@ __This project currently supports iOS 9+ and Android 7__
 First cd into your project's directory and grab the latest version of this code:
 
 ```bash
-$ npm install react-native-quick-actions --save
+$ yarn add --dev react-native-quick-actions
+```
+
+Then link quick actions to your project:
+
+```bash
+$ react-native link react-native-quick-actions
 ```
 
 ## Usage
 
-### Linking the Library for iOS
-
-In order to use quick actions you must first link the library to your project.  There's excellent documentation on how to do this in the [React Native Docs](http://facebook.github.io/react-native/docs/linking-libraries-ios.html#content). Make sure you do all steps including #3
-
-Lastly, add the following lines to your `AppDelegate.m` file:
-
-```obj-c
-#import "RNQuickActionManager.h"
-
-// @implementation AppDelegate
-
-- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler {
-  [RNQuickActionManager onQuickActionPress:shortcutItem completionHandler:completionHandler];
-}
-
-// @end
-```
-
-### Linking the Library for Android
-
-First, add the following line in `settings.gradle`
-```
-include ':app',
-        ':react-native-quick-actions'
-
-project(':react-native-quick-actions').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-quick-actions/android')
-```
-
-Secondly, add the following line in app `build.gradle`
-```
-dependencies {
-    ...
-    compile project(':react-native-quick-actions')
-}
-```
-
-Lastly, add the following lines in your main Application
-```
-import com.reactNativeQuickActions.AppShortcutsPackage;
-
-protected List<ReactPackage> getPackages() {
-    return Arrays.asList(
-        ...
-        new AppShortcutsPackage()
-    );
-}
-```
+Now let's see how you can use this library to trigger shortcut actions in your react native app.
 
 ### Adding static quick actions - iOS only
 
