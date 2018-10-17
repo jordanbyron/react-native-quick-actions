@@ -30,6 +30,20 @@ Then link quick actions to your project:
 $ react-native link react-native-quick-actions
 ```
 
+Lastly, add the following lines to your `AppDelegate.m` file:		
+		
+```obj-c		
+#import "RNQuickActionManager.h"		
+		
+// @implementation AppDelegate		
+		
+- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL succeeded)) completionHandler {		
+  [RNQuickActionManager onQuickActionPress:shortcutItem completionHandler:completionHandler];		
+}		
+		
+// @end
+```
+
 ## Usage
 
 Now let's see how you can use this library to trigger shortcut actions in your react native app.
