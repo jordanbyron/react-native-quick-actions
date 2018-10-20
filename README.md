@@ -30,7 +30,9 @@ Then link quick actions to your project:
 $ react-native link react-native-quick-actions
 ```
 
-Lastly, add the following lines to your `AppDelegate.m` file:		
+### iOS
+
+Add the following lines to your `AppDelegate.m` file:		
 		
 ```obj-c		
 #import "RNQuickActionManager.h"		
@@ -42,6 +44,21 @@ Lastly, add the following lines to your `AppDelegate.m` file:
 }		
 		
 // @end
+```
+
+### Android
+
+Add the following lines in your main Application	
+
+```
+import com.reactNativeQuickActions.AppShortcutsPackage;
+
+protected List<ReactPackage> getPackages() {
+    return Arrays.asList(
+        ...
+        new AppShortcutsPackage()
+    );
+}
 ```
 
 ## Usage
