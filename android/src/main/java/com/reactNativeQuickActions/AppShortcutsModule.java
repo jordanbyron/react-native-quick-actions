@@ -8,9 +8,9 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.os.Build;
+import android.os.PersistableBundle;
 
 import com.facebook.react.bridge.ActivityEventListener;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.Promise;
@@ -31,9 +31,7 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
     static final String REACT_NAME = "ReactAppShortcuts";
 
     private static final String ACTION_SHORTCUT = "ACTION_SHORTCUT";
-    private static final String SHORTCUT_TYPE = "SHORTCUT_TYPE";
-
-    private List<ShortcutItem> mShortcutItems;
+    private static final String SHORTCUT_ITEM = "SHORTCUT_ITEM";
 
     AppShortcutsModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -67,10 +65,10 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
                 Intent intent = currentActivity.getIntent();
 
                 if (ACTION_SHORTCUT.equals(intent.getAction())) {
-                    String type = intent.getStringExtra(SHORTCUT_TYPE);
-                    if (type != null) {
-                        map = Arguments.createMap();
-                        map.putString("type", type);
+                    PersistableBundle bundle = intent.getParcelableExtra(SHORTCUT_ITEM);
+                    if (bundle != null) {
+                        ShortcutItem item = ShortcutItem.fromPersistableBundle(bundle);
+                        map = item.toWritableMap();
                     }
                 }
             }
@@ -95,18 +93,16 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
         }
 
         Context context = getReactApplicationContext();
-        mShortcutItems = new ArrayList<>(items.size());
         List<ShortcutInfo> shortcuts = new ArrayList<>(items.size());
 
         for (int i = 0; i < items.size(); i++) {
             ShortcutItem item = ShortcutItem.fromReadableMap(items.getMap(i));
-            mShortcutItems.add(item);
 
             int iconResId = context.getResources()
                     .getIdentifier(item.icon, "drawable", context.getPackageName());
             Intent intent = new Intent(context, currentActivity.getClass());
             intent.setAction(ACTION_SHORTCUT);
-            intent.putExtra(SHORTCUT_TYPE, item.type);
+            intent.putExtra(SHORTCUT_ITEM, item.toPersistableBundle());
 
             shortcuts.add(new ShortcutInfo.Builder(context, "id" + i)
                     .setShortLabel(item.title)
@@ -127,7 +123,6 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
         }
 
         getReactApplicationContext().getSystemService(ShortcutManager.class).removeAllDynamicShortcuts();
-        mShortcutItems = null;
     }
 
     @ReactMethod
@@ -146,24 +141,15 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        String type = intent.getStringExtra(SHORTCUT_TYPE);
-        ShortcutItem item = getShortcutItem(type);
+        ShortcutItem item = null;
+        PersistableBundle bundle = intent.getParcelableExtra(SHORTCUT_ITEM);
+        if (bundle != null) {
+            item = ShortcutItem.fromPersistableBundle(bundle);
+        }
         if (item != null) {
             getReactApplicationContext()
                     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                     .emit("quickActionShortcut", item.toWritableMap());
         }
     }
-
-    private ShortcutItem getShortcutItem(String type) {
-        if (mShortcutItems != null && type != null) {
-            for (ShortcutItem item : mShortcutItems) {
-                if (item.type.equals(type)) {
-                    return item;
-                }
-            }
-        }
-        return null;
-    }
-
 }
