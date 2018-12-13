@@ -9,7 +9,7 @@ Support for the new 3D Touch home screen quick actions for your React Native app
 ## Installing
 
 ```bash
-$ yarn add -D react-native-quick-actions
+$ yarn add react-native-quick-actions
 $ react-native link react-native-quick-actions
 ```
 
