@@ -29,6 +29,32 @@ Add the following lines to your `AppDelegate.m` file:
 // @end
 ```
 
+### Manual Linking on Android
+
+Add the following to `app/build.gradle` within the 
+
+```
+dependencies {
+  ...
+}
+``` 
+section
+
+`implementation project(':react-native-quick-actions')`
+
+Add `import com.reactNativeQuickActions.AppShortcutsPackage;` to your `MainApplication.java`
+
+Also add `new AppShortcutsPackage()` within the 
+
+```
+public List<ReactPackage> createAdditionalReactPackages() {
+  return Arrays.<ReactPackage>asList(
+    ...
+  );
+}
+```
+section of `MainApplication.java`
+
 ## Usage
 
 ### Adding static quick actions - iOS only
