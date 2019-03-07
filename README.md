@@ -31,22 +31,17 @@ Add the following lines to your `AppDelegate.m` file:
 
 ### Manual Linking on Android
 
-Add the following to `app/build.gradle` within the 
+Add the following to `app/build.gradle` within the `dependencies { ... }` section
 
-```
-dependencies {
-  ...
-}
-``` 
-section
-
-`implementation project(':react-native-quick-actions')`
+```java
+implementation project(':react-native-quick-actions')
+````
 
 Add `import com.reactNativeQuickActions.AppShortcutsPackage;` to your `MainApplication.java`
 
 Also add `new AppShortcutsPackage()` within the 
 
-```
+```java
 public List<ReactPackage> createAdditionalReactPackages() {
   return Arrays.<ReactPackage>asList(
     ...
