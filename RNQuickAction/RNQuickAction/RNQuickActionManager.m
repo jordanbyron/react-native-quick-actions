@@ -126,8 +126,10 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 {
+  dispatch_async(dispatch_get_main_queue(), ^{
     NSArray *dynamicShortcuts = [self dynamicShortcutItemsForPassedArray:shortcutItems];
     [UIApplication sharedApplication].shortcutItems = dynamicShortcuts;
+  });
 }
 
 RCT_EXPORT_METHOD(isSupported:(RCTResponseSenderBlock)callback)
