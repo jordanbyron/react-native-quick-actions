@@ -157,6 +157,14 @@ RCT_EXPORT_METHOD(clearShortcutItems)
 
 - (void)handleQuickActionPress:(NSNotification *) notification
 {
+    if (_initialAction) { // quick action when cold launch
+        static BOOL first = true;
+        if (first) { // do not send first event
+            first = false;
+            return;
+        }
+    }
+    
     [_bridge.eventDispatcher sendDeviceEventWithName:@"quickActionShortcut"
                                                 body:notification.userInfo];
 }
