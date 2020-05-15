@@ -21,6 +21,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.WritableNativeMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
 
     private static final String ACTION_SHORTCUT = "ACTION_SHORTCUT";
     private static final String SHORTCUT_ITEM = "SHORTCUT_ITEM";
+    private static final String ACTION_SHORTCUT_STATIC = "ACTION_SHORTCUT_STATIC";
 
     AppShortcutsModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -59,21 +61,27 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
     public void popInitialAction(Promise promise) {
         try {
             Activity currentActivity = getCurrentActivity();
-            WritableMap map = null;
+            
 
             if (currentActivity != null) {
                 Intent intent = currentActivity.getIntent();
-
+                
                 if (ACTION_SHORTCUT.equals(intent.getAction())) {
+                    WritableMap map = null;
                     PersistableBundle bundle = intent.getParcelableExtra(SHORTCUT_ITEM);
                     if (bundle != null) {
                         ShortcutItem item = ShortcutItem.fromPersistableBundle(bundle);
                         map = item.toWritableMap();
                     }
+                    promise.resolve(map);
+                } else if (ACTION_SHORTCUT_STATIC.equals(intent.getAction())) {
+                    WritableMap map = new WritableNativeMap();
+                    map.putString("type", intent.getStringExtra("SHORTCUT_ITEM_TYPE"));
+                    map.putString("title", intent.getStringExtra("SHORTCUT_ITEM_TITLE"));
+                    promise.resolve(map);
                 }
+                
             }
-
-            promise.resolve(map);
         } catch (Exception e) {
             promise.reject(new JSApplicationIllegalArgumentException(
                     "AppShortcuts.popInitialAction error. " + e.getMessage()));
@@ -98,18 +106,13 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
         for (int i = 0; i < items.size(); i++) {
             ShortcutItem item = ShortcutItem.fromReadableMap(items.getMap(i));
 
-            int iconResId = context.getResources()
-                    .getIdentifier(item.icon, "drawable", context.getPackageName());
+            int iconResId = context.getResources().getIdentifier(item.icon, "drawable", context.getPackageName());
             Intent intent = new Intent(context, currentActivity.getClass());
             intent.setAction(ACTION_SHORTCUT);
             intent.putExtra(SHORTCUT_ITEM, item.toPersistableBundle());
 
-            shortcuts.add(new ShortcutInfo.Builder(context, "id" + i)
-                    .setShortLabel(item.title)
-                    .setLongLabel(item.title)
-                    .setIcon(Icon.createWithResource(context, iconResId))
-                    .setIntent(intent)
-                    .build());
+            shortcuts.add(new ShortcutInfo.Builder(context, "id" + i).setShortLabel(item.title).setLongLabel(item.title)
+                    .setIcon(Icon.createWithResource(context, iconResId)).setIntent(intent).build());
         }
 
         getReactApplicationContext().getSystemService(ShortcutManager.class).setDynamicShortcuts(shortcuts);
@@ -137,19 +140,27 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
     }
 
     private void sendJSEvent(Intent intent) {
-        if (!ACTION_SHORTCUT.equals(intent.getAction()) || !isShortcutSupported()) {
+        if ((!ACTION_SHORTCUT.equals(intent.getAction()) && !ACTION_SHORTCUT_STATIC.equals(intent.getAction()))
+                || !isShortcutSupported()) {
             return;
         }
+        if (ACTION_SHORTCUT.equals(intent.getAction())) {
+            ShortcutItem item = null;
+            PersistableBundle bundle = intent.getParcelableExtra(SHORTCUT_ITEM);
+            if (bundle != null) {
+                item = ShortcutItem.fromPersistableBundle(bundle);
+            }
+            if (item != null) {
+                getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit("quickActionShortcut", item.toWritableMap());
+            }
+        } else {
+            WritableMap map = new WritableNativeMap();
+            map.putString("type", intent.getStringExtra("SHORTCUT_ITEM_TYPE"));
+            map.putString("title", intent.getStringExtra("SHORTCUT_ITEM_TITLE"));
+            getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("quickActionShortcut", map);
+        }
 
-        ShortcutItem item = null;
-        PersistableBundle bundle = intent.getParcelableExtra(SHORTCUT_ITEM);
-        if (bundle != null) {
-            item = ShortcutItem.fromPersistableBundle(bundle);
-        }
-        if (item != null) {
-            getReactApplicationContext()
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit("quickActionShortcut", item.toWritableMap());
-        }
     }
 }
