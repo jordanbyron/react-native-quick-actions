@@ -94,7 +94,7 @@ QuickActions.setShortcutItems([
 ]);
 ```
 
-**NOTE** Currently android only supports a `url` key in `userInfo`. No other keys are supported. See #93 for more information.
+**NOTE** Currently android only supports a `url` key in `userInfo`. No other keys are supported. See [#93](https://github.com/jordanbyron/react-native-quick-actions/issues/93) for more information.
 
 To clear actions:
 
