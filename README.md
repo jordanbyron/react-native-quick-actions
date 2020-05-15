@@ -94,6 +94,8 @@ QuickActions.setShortcutItems([
 ]);
 ```
 
+**NOTE** Currently android only supports a `url` key in `userInfo`. No other keys are supported. See #93 for more information.
+
 To clear actions:
 
 ```js
