@@ -1,4 +1,4 @@
-declare module 'react-native-quick-actions' {
+declare module '@shimo/react-native-quick-actions' {
 
   export interface ShortcutItem {
     type: string;
