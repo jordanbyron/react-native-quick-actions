@@ -134,8 +134,13 @@ RCT_EXPORT_METHOD(setShortcutItems:(NSArray *) shortcutItems)
 
 RCT_EXPORT_METHOD(isSupported:(RCTResponseSenderBlock)callback)
 {
-    BOOL supported = [[UIApplication sharedApplication].delegate.window.rootViewController.traitCollection forceTouchCapability] == UIForceTouchCapabilityAvailable;
-
+    BOOL supported = NO;
+    NSString *systemVersion = [UIDevice currentDevice].systemVersion;
+    if (systemVersion.doubleValue >= 13.0) { // 13以后去掉所有设备的3dtouch
+        supported = YES;
+    } else { // 13以前
+        supported = [[UIApplication sharedApplication].delegate.window.rootViewController.traitCollection forceTouchCapability] == UIForceTouchCapabilityAvailable;
+    }
     callback(@[[NSNull null], [NSNumber numberWithBool:supported]]);
 }
 
