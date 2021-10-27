@@ -13,6 +13,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/jordanbyron/react-native-quick-actions.git", :tag => "#{s.version}" }
   s.source_files = 'RNQuickAction/RNQuickAction/*.{h,m}'
   s.preserve_paths = "**/*.js"
-  s.dependency 'React'
+  s.dependency 'React-Core'
 
 end
